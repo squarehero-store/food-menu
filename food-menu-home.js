@@ -4,8 +4,11 @@ document.addEventListener("DOMContentLoaded", function() {
     const isEnabled = foodMenuMeta ? foodMenuMeta.getAttribute('enabled') === 'true' : false;
 
     if (isEnabled) {
+        console.log("Food menu is enabled");
+
         const foodMenuContainer = document.getElementById('foodMenuContainer');
-        
+        console.log("foodMenuContainer:", foodMenuContainer);
+
         // Check if the foodMenuContainer exists
         if (foodMenuContainer) {
             // Create the HTML structure
@@ -47,5 +50,7 @@ document.addEventListener("DOMContentLoaded", function() {
         } else {
             console.error('foodMenuContainer not found');
         }
+    } else {
+        console.log("Food menu is not enabled");
     }
 });
