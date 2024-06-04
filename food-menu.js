@@ -1,6 +1,6 @@
 document.addEventListener("DOMContentLoaded", function() {
     // Check if the food-menu meta tag is enabled
-    const foodMenuMeta = document.querySelector('meta[name="food-menu"]');
+    const foodMenuMeta = document.querySelector('meta[squarehero-plugin="food-menu"]');
     const isEnabled = foodMenuMeta ? foodMenuMeta.getAttribute('enabled') === 'true' : false;
 
     if (isEnabled) {
