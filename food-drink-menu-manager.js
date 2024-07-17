@@ -2,16 +2,22 @@
 //   ⚡ SquareHero Food & Drink Menu Manager v0.2.0 ⚡
 // ===============================================
 
-document.addEventListener("DOMContentLoaded", function() {
+window.onload = function() {
+    console.log('Window loaded'); // Log to confirm window load
+
     // Add 'menu-page' class to the body
     document.body.classList.add('menu-page');
 
     // Check if the food-menu meta tag is enabled
     const foodMenuMeta = document.querySelector('meta[squarehero-plugin="food-menu"]');
+    console.log('foodMenuMeta:', foodMenuMeta); // Log the meta tag
+
     const isEnabled = foodMenuMeta ? foodMenuMeta.getAttribute('enabled') === 'true' : false;
+    console.log('isEnabled:', isEnabled); // Log if the plugin is enabled
 
     if (isEnabled) {
         const foodMenuContainer = document.getElementById('foodMenuContainer');
+        console.log('foodMenuContainer:', foodMenuContainer); // Log the container
 
         // Create the HTML structure
         foodMenuContainer.innerHTML = `
@@ -23,12 +29,14 @@ document.addEventListener("DOMContentLoaded", function() {
 
         // Get the Google Sheets URL from the meta tag
         const sheetUrl = foodMenuMeta.getAttribute('sheet-url');
+        console.log('sheetUrl:', sheetUrl); // Log the sheet URL
 
         if (sheetUrl) {
             Papa.parse(sheetUrl, {
                 download: true,
                 header: true,
                 complete: function(results) {
+                    console.log('Parsed results:', results); // Log the parsed results
                     const rows = results.data;
                     const menuTabs = document.getElementById('menuTabs');
                     const menuItemsWrapper = document.getElementById('menuItemsWrapper');
@@ -132,4 +140,4 @@ document.addEventListener("DOMContentLoaded", function() {
             console.error('No sheet URL provided in the meta tag.');
         }
     }
-});
+};
