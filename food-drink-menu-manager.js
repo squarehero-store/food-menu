@@ -22,8 +22,7 @@ document.addEventListener("DOMContentLoaded", function() {
         `;
 
         // Get the Google Sheets URL from the meta tag
-        const metaTag = document.querySelector('meta[name="food-menu-sheet"]');
-        const sheetUrl = metaTag ? metaTag.getAttribute('content') : '';
+        const sheetUrl = foodMenuMeta.getAttribute('sheet-url');
 
         if (sheetUrl) {
             Papa.parse(sheetUrl, {
