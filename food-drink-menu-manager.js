@@ -1,3 +1,7 @@
+// ===============================================
+//   ⚡ SquareHero Food & Drink Menu Manager v0.2.0 ⚡
+// ===============================================
+
 document.addEventListener("DOMContentLoaded", function() {
     // Add 'menu-page' class to the body
     document.body.classList.add('menu-page');
