@@ -1,6 +1,6 @@
-// ===============================================
-//   ⚡ SquareHero Food & Drink Menu Manager v0.2.0 ⚡
-// ===============================================
+// =================================================
+//   ⚡ SquareHero Food & Drink Menu Manager v0.2.3 ⚡
+// =================================================
 
 window.onload = function() {
     console.log('Window loaded'); // Log to confirm window load
@@ -62,9 +62,21 @@ window.onload = function() {
                     // Function to display menu items based on menu type
                     function displayMenu(menuType) {
                         menuItemsWrapper.innerHTML = ''; // Clear previous menu items
-                        rows.forEach(row => {
-                            if (row.Menu === menuType) {
-                                const { Title, Price, Description, Notes } = row;
+                        const menuGroups = groupBySubCategory(rows.filter(row => row.Menu === menuType));
+
+                        // Display each sub-category and its items
+                        for (const [subCategory, items] of Object.entries(menuGroups)) {
+                            const subCategoryContainer = document.createElement('div');
+                            subCategoryContainer.classList.add('menu-items--subcategory');
+
+                            if (subCategory !== 'Other') {
+                                const subCategoryElem = document.createElement('h2');
+                                subCategoryElem.textContent = subCategory;
+                                subCategoryContainer.appendChild(subCategoryElem);
+                            }
+
+                            items.forEach(row => {
+                                const { Title, Price, 'Price Description': PriceDescription, Description, Notes } = row;
 
                                 const menuItem = document.createElement('div');
                                 menuItem.classList.add('menu-item');
@@ -75,6 +87,13 @@ window.onload = function() {
                                 const titleElem = document.createElement('h3');
                                 titleElem.textContent = Title;
                                 titlePriceContainer.appendChild(titleElem);
+
+                                if (Notes) {
+                                    const notesElem = document.createElement('span');
+                                    notesElem.textContent = ` (${Notes})`;
+                                    notesElem.classList.add('notes');
+                                    titleElem.appendChild(notesElem);
+                                }
 
                                 if (Price) {
                                     const priceElem = document.createElement('span');
@@ -90,16 +109,30 @@ window.onload = function() {
                                 descriptionElem.classList.add('menu-item--description');
                                 menuItem.appendChild(descriptionElem);
 
-                                if (Notes) {
-                                    const notesElem = document.createElement('p');
-                                    notesElem.textContent = Notes;
-                                    notesElem.classList.add('menu-item--notes');
-                                    menuItem.appendChild(notesElem);
+                                if (PriceDescription) {
+                                    const priceDescriptionElem = document.createElement('p');
+                                    priceDescriptionElem.textContent = PriceDescription;
+                                    priceDescriptionElem.classList.add('menu-item--price-description');
+                                    menuItem.appendChild(priceDescriptionElem);
                                 }
 
-                                menuItemsWrapper.appendChild(menuItem);
+                                subCategoryContainer.appendChild(menuItem);
+                            });
+
+                            menuItemsWrapper.appendChild(subCategoryContainer);
+                        }
+                    }
+
+                    // Function to group items by sub-category
+                    function groupBySubCategory(rows) {
+                        return rows.reduce((acc, row) => {
+                            const subCategory = row['Sub Category'] || 'Other';
+                            if (!acc[subCategory]) {
+                                acc[subCategory] = [];
                             }
-                        });
+                            acc[subCategory].push(row);
+                            return acc;
+                        }, {});
                     }
 
                     // Set active tab class
@@ -129,8 +162,25 @@ window.onload = function() {
                         });
                     }
 
-                    // Display the first tab by default
-                    displayMenu(uniqueMenus[0]);
+                    // Function to get the query parameter value
+                    function getQueryParam(param) {
+                        const urlParams = new URLSearchParams(window.location.search);
+                        return urlParams.get(param);
+                    }
+
+                    // Display the default or specified tab based on URL query parameter
+                    const defaultMenu = uniqueMenus[0];
+                    const requestedMenu = getQueryParam('menu');
+                    const menuToDisplay = uniqueMenus.find(menu => menu.toLowerCase() === (requestedMenu ? requestedMenu.toLowerCase() : '').toLowerCase()) || defaultMenu;
+                    
+                    const tabs = menuTabs.getElementsByTagName('button');
+                    for (let i = 0; i < tabs.length; i++) {
+                        if (tabs[i].textContent.toLowerCase() === menuToDisplay.toLowerCase()) {
+                            setActiveTab(tabs[i]);
+                            scrollToTab(tabs[i]);
+                        }
+                    }
+                    displayMenu(menuToDisplay);
                 },
                 error: function(error, file) {
                     console.error('Error parsing CSV:', error, file);
