@@ -4,6 +4,9 @@ node_modules/
 # Ignore log files
 *.log
 
+# Ignore html files
+*.html
+
 # Ignore LESS files
 *.less
 
