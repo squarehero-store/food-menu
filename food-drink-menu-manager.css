@@ -67,7 +67,7 @@
     font-size: 1.2rem;
   }
 }
-[data-squarehero="restaurant-menu"] .menu-items--wrapper .price {
+[data-squarehero="restaurant-menu"] .menu-items--wrapper .menu-item .price {
   text-align: right;
   font-family: var(--heading-font-font-family);
   font-size: 1.25rem;
@@ -76,19 +76,23 @@
   line-height: 105%;
   padding-left: 30px;
 }
-[data-squarehero="restaurant-menu"] .menu-items--wrapper .menu-item--description {
+[data-squarehero="restaurant-menu"] .menu-items--wrapper .menu-item .menu-item--description {
   margin-bottom: 0;
   margin-top: 15px;
 }
 @media only screen and (max-width: 750px) {
-  [data-squarehero="restaurant-menu"] .menu-items--wrapper .menu-item--description {
+  [data-squarehero="restaurant-menu"] .menu-items--wrapper .menu-item .menu-item--description {
     margin-top: 0;
     font-size: 1rem;
     line-height: 140%;
     padding-right: 12vw;
   }
 }
-[data-squarehero="restaurant-menu"] .menu-items--wrapper .menu-item--notes {
+[data-squarehero="restaurant-menu"] .menu-items--wrapper .menu-item .notes {
+  font-size: 1rem;
+  padding-left: 5px;
+}
+[data-squarehero="restaurant-menu"] .menu-items--wrapper .menu-item .menu-item--price-description {
   font-size: 1rem;
   font-weight: 500;
   margin-top: 5px;
