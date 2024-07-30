@@ -1,5 +1,5 @@
 // =================================================
-//   ⚡ SquareHero Food & Drink Menu Manager v0.2.3 ⚡
+//   ⚡ SquareHero Food & Drink Menu Manager v0.2.5 ⚡
 // =================================================
 
 window.onload = function () {
@@ -22,6 +22,12 @@ window.onload = function () {
         // Create the HTML structure
         foodMenuContainer.innerHTML = `
             <div data-squarehero="restaurant-menu">
+                <div class="swipe-instruction-container">
+            <p class="swipe-instruction">Swipe for more categories</p>
+            <svg class="swipe-arrow" xmlns="http://www.w3.org/2000/svg" width="16" height="10" fill="none" viewBox="0 0 16 10">
+                <path stroke="#000" stroke-width="2" d="m1 1 7 7 7-7"/>
+            </svg>
+        </div>
                 <div class="menu-tabs" id="menuTabs"></div>
                 <div class="menu-items--wrapper" id="menuItemsWrapper"></div>
             </div>
