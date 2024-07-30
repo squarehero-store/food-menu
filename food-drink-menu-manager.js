@@ -2,7 +2,7 @@
 //   ⚡ SquareHero Food & Drink Menu Manager v0.2.3 ⚡
 // =================================================
 
-window.onload = function() {
+window.onload = function () {
     console.log('Window loaded'); // Log to confirm window load
 
     // Add 'menu-page' class to the body
@@ -35,7 +35,7 @@ window.onload = function() {
             Papa.parse(sheetUrl, {
                 download: true,
                 header: true,
-                complete: function(results) {
+                complete: function (results) {
                     console.log('Parsed results:', results); // Log the parsed results
                     const rows = results.data;
                     const menuTabs = document.getElementById('menuTabs');
@@ -46,7 +46,8 @@ window.onload = function() {
                     uniqueMenus.forEach((menuType, index) => {
                         const tabButton = document.createElement('button');
                         tabButton.textContent = menuType;
-                        tabButton.onclick = function() {
+                        tabButton.classList.add('sh-button'); // Add the 'sh-button' class
+                        tabButton.onclick = function () {
                             displayMenu(menuType);
                             setActiveTab(tabButton);
                             scrollToTab(tabButton);
@@ -62,6 +63,13 @@ window.onload = function() {
                     // Function to display menu items based on menu type
                     function displayMenu(menuType) {
                         menuItemsWrapper.innerHTML = ''; // Clear previous menu items
+
+                        // Add h2 for the main category title
+                        const mainCategoryTitle = document.createElement('h2');
+                        mainCategoryTitle.textContent = menuType;
+                        mainCategoryTitle.classList.add('menu-main-category');
+                        menuItemsWrapper.appendChild(mainCategoryTitle);
+
                         const menuGroups = groupBySubCategory(rows.filter(row => row.Menu === menuType));
 
                         // Display each sub-category and its items
@@ -70,7 +78,7 @@ window.onload = function() {
                             subCategoryContainer.classList.add('menu-items--subcategory');
 
                             if (subCategory !== 'Other') {
-                                const subCategoryElem = document.createElement('h2');
+                                const subCategoryElem = document.createElement('h3');  // Changed from h2 to h3
                                 subCategoryElem.textContent = subCategory;
                                 subCategoryContainer.appendChild(subCategoryElem);
                             }
@@ -172,7 +180,7 @@ window.onload = function() {
                     const defaultMenu = uniqueMenus[0];
                     const requestedMenu = getQueryParam('menu');
                     const menuToDisplay = uniqueMenus.find(menu => menu.toLowerCase() === (requestedMenu ? requestedMenu.toLowerCase() : '').toLowerCase()) || defaultMenu;
-                    
+
                     const tabs = menuTabs.getElementsByTagName('button');
                     for (let i = 0; i < tabs.length; i++) {
                         if (tabs[i].textContent.toLowerCase() === menuToDisplay.toLowerCase()) {
@@ -182,7 +190,7 @@ window.onload = function() {
                     }
                     displayMenu(menuToDisplay);
                 },
-                error: function(error, file) {
+                error: function (error, file) {
                     console.error('Error parsing CSV:', error, file);
                 }
             });
