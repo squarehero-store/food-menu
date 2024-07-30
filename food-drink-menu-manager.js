@@ -92,7 +92,7 @@ window.onload = function () {
                                 const titlePriceContainer = document.createElement('div');
                                 titlePriceContainer.classList.add('menu-item--title');
 
-                                const titleElem = document.createElement('h3');
+                                const titleElem = document.createElement('h4');
                                 titleElem.textContent = Title;
                                 titlePriceContainer.appendChild(titleElem);
 
