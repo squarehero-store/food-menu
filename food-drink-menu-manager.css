@@ -145,7 +145,6 @@
   font-weight: 500;
   line-height: normal;
   border: solid 2px hsla(var(--darkAccent-hsl), 1);
-  border-radius: 100px;
   color: hsla(var(--darkAccent-hsl), 1);
   text-decoration: none;
   background: none;
