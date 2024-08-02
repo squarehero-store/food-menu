@@ -1,21 +1,17 @@
 window.onload = function () {
-    console.info('🚀 SquareHero.store Back to Top plugin loaded');
+    console.info('🚀 SquareHero.store Food & Drink Menu Manager plugin loaded');
 
     document.body.classList.add('menu-page');
 
     const foodMenuMeta = document.querySelector('meta[squarehero-plugin="food-menu"]');
     const isEnabled = foodMenuMeta ? foodMenuMeta.getAttribute('enabled') === 'true' : false;
 
-    console.log('Food Menu Meta:', foodMenuMeta);
-    console.log('Is Enabled:', isEnabled);
-
     if (isEnabled) {
         const foodMenuContainer = document.getElementById('foodMenuContainer');
-        console.log('Food Menu Container:', foodMenuContainer);
 
         foodMenuContainer.innerHTML = `
             <div data-squarehero="restaurant-menu">
-                <div class="swipe-instruction-container">
+                <div class="swipe-instruction-container" style="display: none;">
                     <p class="swipe-instruction">Swipe for more categories</p>
                     <svg class="swipe-arrow" xmlns="http://www.w3.org/2000/svg" width="16" height="10" fill="none" viewBox="0 0 16 10">
                         <path stroke="#000" stroke-width="2" d="m1 1 7 7 7-7"/>
@@ -27,7 +23,6 @@ window.onload = function () {
         `;
 
         const sheetUrl = foodMenuMeta.getAttribute('sheet-url');
-        console.log('Sheet URL:', sheetUrl);
 
         if (sheetUrl) {
             Papa.parse(sheetUrl, {
@@ -35,13 +30,11 @@ window.onload = function () {
                 header: true,
                 complete: function (results) {
                     const rows = results.data;
-                    console.log('Parsed Rows:', rows);
 
                     const menuTabs = document.getElementById('menuTabs');
                     const menuItemsWrapper = document.getElementById('menuItemsWrapper');
 
                     const uniqueMenus = [...new Set(rows.map(row => row.Menu).filter(menu => menu.trim() !== ''))];
-                    console.log('Unique Menus:', uniqueMenus);
 
                     uniqueMenus.forEach((menuType, index) => {
                         const tabButton = document.createElement('button');
@@ -59,9 +52,10 @@ window.onload = function () {
                         }
                     });
 
+                    toggleSwipeInstruction();
+
                     function displayMenu(menuType) {
                         menuItemsWrapper.innerHTML = '';
-                        console.log('Displaying Menu:', menuType);
 
                         const mainCategoryTitle = document.createElement('h2');
                         mainCategoryTitle.textContent = menuType;
@@ -69,7 +63,6 @@ window.onload = function () {
                         menuItemsWrapper.appendChild(mainCategoryTitle);
 
                         const menuGroups = groupBySubCategory(rows.filter(row => row.Menu === menuType));
-                        console.log('Menu Groups:', menuGroups);
 
                         for (const [subCategory, items] of Object.entries(menuGroups)) {
                             const subCategoryContainer = document.createElement('div');
@@ -81,7 +74,7 @@ window.onload = function () {
                                 subCategoryContainer.appendChild(subCategoryElem);
                             }
 
-                            items.forEach((row, index) => {
+                            items.forEach((row) => {
                                 const { Title, Price, Description, 'Price Description': PriceDescription, Notes } = row;
 
                                 if (Title) {
@@ -171,6 +164,23 @@ window.onload = function () {
                         const urlParams = new URLSearchParams(window.location.search);
                         return urlParams.get(param);
                     }
+
+                    function isSwipeNecessary() {
+                        const menuTabs = document.getElementById('menuTabs');
+                        const totalTabsWidth = Array.from(menuTabs.children).reduce((total, tab) => total + tab.offsetWidth, 0);
+                        return totalTabsWidth > window.innerWidth;
+                    }
+
+                    function toggleSwipeInstruction() {
+                        const swipeInstructionContainer = document.querySelector('.swipe-instruction-container');
+                        if (isSwipeNecessary()) {
+                            swipeInstructionContainer.style.display = 'flex';
+                        } else {
+                            swipeInstructionContainer.style.display = 'none';
+                        }
+                    }
+
+                    window.addEventListener('resize', toggleSwipeInstruction);
 
                     const defaultMenu = uniqueMenus[0];
                     const requestedMenu = getQueryParam('menu');
