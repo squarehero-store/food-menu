@@ -1,7 +1,3 @@
-// ==============================================
-//   ⚡ SquareHero Food & Drink Menu Manager  ⚡
-// ==============================================
-
 window.onload = function () {
     console.info('🚀 SquareHero.store Back to Top plugin loaded');
 
@@ -10,23 +6,28 @@ window.onload = function () {
     const foodMenuMeta = document.querySelector('meta[squarehero-plugin="food-menu"]');
     const isEnabled = foodMenuMeta ? foodMenuMeta.getAttribute('enabled') === 'true' : false;
 
+    console.log('Food Menu Meta:', foodMenuMeta);
+    console.log('Is Enabled:', isEnabled);
+
     if (isEnabled) {
         const foodMenuContainer = document.getElementById('foodMenuContainer');
+        console.log('Food Menu Container:', foodMenuContainer);
 
         foodMenuContainer.innerHTML = `
             <div data-squarehero="restaurant-menu">
                 <div class="swipe-instruction-container">
-            <p class="swipe-instruction">Swipe for more categories</p>
-            <svg class="swipe-arrow" xmlns="http://www.w3.org/2000/svg" width="16" height="10" fill="none" viewBox="0 0 16 10">
-                <path stroke="#000" stroke-width="2" d="m1 1 7 7 7-7"/>
-            </svg>
-        </div>
+                    <p class="swipe-instruction">Swipe for more categories</p>
+                    <svg class="swipe-arrow" xmlns="http://www.w3.org/2000/svg" width="16" height="10" fill="none" viewBox="0 0 16 10">
+                        <path stroke="#000" stroke-width="2" d="m1 1 7 7 7-7"/>
+                    </svg>
+                </div>
                 <div class="menu-tabs" id="menuTabs"></div>
                 <div class="menu-items--wrapper" id="menuItemsWrapper"></div>
             </div>
         `;
 
         const sheetUrl = foodMenuMeta.getAttribute('sheet-url');
+        console.log('Sheet URL:', sheetUrl);
 
         if (sheetUrl) {
             Papa.parse(sheetUrl, {
@@ -34,9 +35,13 @@ window.onload = function () {
                 header: true,
                 complete: function (results) {
                     const rows = results.data;
+                    console.log('Parsed Rows:', rows);
+
                     const menuTabs = document.getElementById('menuTabs');
                     const menuItemsWrapper = document.getElementById('menuItemsWrapper');
-                    const uniqueMenus = [...new Set(rows.map(row => row.Menu))];
+
+                    const uniqueMenus = [...new Set(rows.map(row => row.Menu).filter(menu => menu.trim() !== ''))];
+                    console.log('Unique Menus:', uniqueMenus);
 
                     uniqueMenus.forEach((menuType, index) => {
                         const tabButton = document.createElement('button');
@@ -56,6 +61,7 @@ window.onload = function () {
 
                     function displayMenu(menuType) {
                         menuItemsWrapper.innerHTML = '';
+                        console.log('Displaying Menu:', menuType);
 
                         const mainCategoryTitle = document.createElement('h2');
                         mainCategoryTitle.textContent = menuType;
@@ -63,6 +69,7 @@ window.onload = function () {
                         menuItemsWrapper.appendChild(mainCategoryTitle);
 
                         const menuGroups = groupBySubCategory(rows.filter(row => row.Menu === menuType));
+                        console.log('Menu Groups:', menuGroups);
 
                         for (const [subCategory, items] of Object.entries(menuGroups)) {
                             const subCategoryContainer = document.createElement('div');
@@ -74,50 +81,52 @@ window.onload = function () {
                                 subCategoryContainer.appendChild(subCategoryElem);
                             }
 
-                            items.forEach(row => {
-                                const { Title, Price, 'Price Description': PriceDescription, Description, Notes } = row;
+                            items.forEach((row, index) => {
+                                const { Title, Price, Description, 'Price Description': PriceDescription, Notes } = row;
 
-                                const menuItem = document.createElement('div');
-                                menuItem.classList.add('menu-item');
+                                if (Title) {
+                                    const menuItem = document.createElement('div');
+                                    menuItem.classList.add('menu-item');
 
-                                const titlePriceContainer = document.createElement('div');
-                                titlePriceContainer.classList.add('menu-item--title');
+                                    const titlePriceContainer = document.createElement('div');
+                                    titlePriceContainer.classList.add('menu-item--title');
 
-                                const titleElem = document.createElement('h4');
-                                titleElem.textContent = Title;
-                                titlePriceContainer.appendChild(titleElem);
+                                    const titleElem = document.createElement('h4');
+                                    titleElem.textContent = Title;
+                                    titlePriceContainer.appendChild(titleElem);
 
-                                if (Notes) {
-                                    const notesElem = document.createElement('span');
-                                    notesElem.textContent = ` (${Notes})`;
-                                    notesElem.classList.add('notes');
-                                    titleElem.appendChild(notesElem);
+                                    if (Notes) {
+                                        const notesElem = document.createElement('span');
+                                        notesElem.textContent = ` (${Notes})`;
+                                        notesElem.classList.add('notes');
+                                        titleElem.appendChild(notesElem);
+                                    }
+
+                                    if (Price) {
+                                        const priceElem = document.createElement('span');
+                                        priceElem.textContent = Price;
+                                        priceElem.classList.add('price');
+                                        titlePriceContainer.appendChild(priceElem);
+                                    }
+
+                                    menuItem.appendChild(titlePriceContainer);
+
+                                    if (Description) {
+                                        const descriptionElem = document.createElement('p');
+                                        descriptionElem.innerHTML = Description.replace(/\n/g, '<br>');
+                                        descriptionElem.classList.add('menu-item--description');
+                                        menuItem.appendChild(descriptionElem);
+                                    }
+
+                                    if (PriceDescription) {
+                                        const priceDescriptionElem = document.createElement('p');
+                                        priceDescriptionElem.innerHTML = PriceDescription.replace(/\n/g, '<br>');
+                                        priceDescriptionElem.classList.add('menu-item--price-description');
+                                        menuItem.appendChild(priceDescriptionElem);
+                                    }
+
+                                    subCategoryContainer.appendChild(menuItem);
                                 }
-
-                                if (Price) {
-                                    const priceElem = document.createElement('span');
-                                    priceElem.textContent = Price;
-                                    priceElem.classList.add('price');
-                                    titlePriceContainer.appendChild(priceElem);
-                                }
-
-                                menuItem.appendChild(titlePriceContainer);
-
-                                if (Description) {
-                                    const descriptionElem = document.createElement('p');
-                                    descriptionElem.textContent = Description;
-                                    descriptionElem.classList.add('menu-item--description');
-                                    menuItem.appendChild(descriptionElem);
-                                }
-
-                                if (PriceDescription) {
-                                    const priceDescriptionElem = document.createElement('p');
-                                    priceDescriptionElem.textContent = PriceDescription;
-                                    priceDescriptionElem.classList.add('menu-item--price-description');
-                                    menuItem.appendChild(priceDescriptionElem);
-                                }
-
-                                subCategoryContainer.appendChild(menuItem);
                             });
 
                             menuItemsWrapper.appendChild(subCategoryContainer);
