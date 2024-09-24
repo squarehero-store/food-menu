@@ -8,7 +8,19 @@ window.onload = function () {
 
     if (isEnabled) {
         const foodMenuContainer = document.getElementById('foodMenuContainer');
-        const style = foodMenuMeta.getAttribute('style') || 'Simple'; // Default to Simple if not specified
+        
+        // Set default attributes for the foodMenuContainer
+        foodMenuContainer.setAttribute('data-squarehero', 'section-name');
+        foodMenuContainer.setAttribute('sh-section', 'sh-menu');
+
+        // Get the style from the meta tag, default to 'Modern' if not specified or invalid
+        let style = 'Modern'; // Default to Modern
+        if (foodMenuMeta) {
+            const metaStyle = foodMenuMeta.getAttribute('style');
+            if (metaStyle && ['Modern', 'Simple'].includes(metaStyle)) {
+                style = metaStyle;
+            }
+        }
 
         foodMenuContainer.innerHTML = `
             <div data-squarehero="restaurant-menu" class="layout--${style.toLowerCase()}">
@@ -23,7 +35,7 @@ window.onload = function () {
             </div>
         `;
 
-        const sheetUrl = foodMenuMeta.getAttribute('sheet-url');
+        const sheetUrl = foodMenuMeta ? foodMenuMeta.getAttribute('sheet-url') : null;
 
         if (sheetUrl) {
             Papa.parse(sheetUrl, {
@@ -76,7 +88,7 @@ window.onload = function () {
                             }
 
                             items.forEach((row) => {
-                                const { Title, Price, Description, 'Price Description': PriceDescription, Notes } = row;
+                                const { Title, Price, Description, Mods, Notes } = row;
 
                                 if (Title) {
                                     const menuItem = document.createElement('div');
@@ -84,6 +96,9 @@ window.onload = function () {
 
                                     const titlePriceContainer = document.createElement('div');
                                     titlePriceContainer.classList.add('menu-item--title');
+                                    if (!Price || Price.trim() === '') {
+                                        titlePriceContainer.classList.add('no-price');
+                                    }
 
                                     const titleElem = document.createElement('h4');
                                     titleElem.textContent = Title;
@@ -112,11 +127,11 @@ window.onload = function () {
                                         menuItem.appendChild(descriptionElem);
                                     }
 
-                                    if (PriceDescription) {
-                                        const priceDescriptionElem = document.createElement('p');
-                                        priceDescriptionElem.innerHTML = PriceDescription.replace(/\n/g, '<br>');
-                                        priceDescriptionElem.classList.add('menu-item--price-description');
-                                        menuItem.appendChild(priceDescriptionElem);
+                                    if (Mods) {
+                                        const modsElem = document.createElement('p');
+                                        modsElem.innerHTML = Mods.replace(/\n/g, '<br>');
+                                        modsElem.classList.add('menu-item--mods');
+                                        menuItem.appendChild(modsElem);
                                     }
 
                                     subCategoryContainer.appendChild(menuItem);
