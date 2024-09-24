@@ -22,6 +22,9 @@ window.onload = function () {
             }
         }
 
+        // Log the style for debugging
+        console.log('Menu style:', style);
+
         foodMenuContainer.innerHTML = `
             <div data-squarehero="restaurant-menu" class="layout--${style.toLowerCase()}">
                 <div class="swipe-instruction-container" style="display: none;">
