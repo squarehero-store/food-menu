@@ -23,6 +23,7 @@ window.onload = function () {
         `;
 
         const sheetUrl = foodMenuMeta.getAttribute('sheet-url');
+        const columns = foodMenuMeta.getAttribute('columns') || '1'; // Default to 1 if not specified
 
         if (sheetUrl) {
             Papa.parse(sheetUrl, {
@@ -67,6 +68,7 @@ window.onload = function () {
                         for (const [subCategory, items] of Object.entries(menuGroups)) {
                             const subCategoryContainer = document.createElement('div');
                             subCategoryContainer.classList.add('menu-items--subcategory');
+                            subCategoryContainer.setAttribute('column-count', columns);
 
                             if (subCategory !== 'Other') {
                                 const subCategoryElem = document.createElement('h3');
