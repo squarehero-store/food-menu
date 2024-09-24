@@ -8,9 +8,10 @@ window.onload = function () {
 
     if (isEnabled) {
         const foodMenuContainer = document.getElementById('foodMenuContainer');
+        const style = foodMenuMeta.getAttribute('style') || 'Simple'; // Default to Simple if not specified
 
         foodMenuContainer.innerHTML = `
-            <div data-squarehero="restaurant-menu">
+            <div data-squarehero="restaurant-menu" class="layout--${style.toLowerCase()}">
                 <div class="swipe-instruction-container" style="display: none;">
                     <p class="swipe-instruction">Swipe for more categories</p>
                     <svg class="swipe-arrow" xmlns="http://www.w3.org/2000/svg" width="16" height="10" fill="none" viewBox="0 0 16 10">
@@ -23,7 +24,6 @@ window.onload = function () {
         `;
 
         const sheetUrl = foodMenuMeta.getAttribute('sheet-url');
-        const columns = foodMenuMeta.getAttribute('columns') || '1'; // Default to 1 if not specified
 
         if (sheetUrl) {
             Papa.parse(sheetUrl, {
@@ -68,7 +68,6 @@ window.onload = function () {
                         for (const [subCategory, items] of Object.entries(menuGroups)) {
                             const subCategoryContainer = document.createElement('div');
                             subCategoryContainer.classList.add('menu-items--subcategory');
-                            subCategoryContainer.setAttribute('column-count', columns);
 
                             if (subCategory !== 'Other') {
                                 const subCategoryElem = document.createElement('h3');
