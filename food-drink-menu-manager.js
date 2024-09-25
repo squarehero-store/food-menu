@@ -8,7 +8,7 @@ window.onload = function () {
 
     if (isEnabled) {
         const foodMenuContainer = document.getElementById('foodMenuContainer');
-        
+
         // Set default attributes for the foodMenuContainer
         foodMenuContainer.setAttribute('data-squarehero', 'section-name');
         foodMenuContainer.setAttribute('sh-section', 'sh-menu');
@@ -69,40 +69,47 @@ window.onload = function () {
 
                     function displayMenu(menuType) {
                         menuItemsWrapper.innerHTML = '';
-                
+
+                        // Create a wrapper for the title and description
+                        const menuHeaderWrapper = document.createElement('div');
+                        menuHeaderWrapper.classList.add('menu-header-wrapper');
+
                         const mainCategoryTitle = document.createElement('h2');
                         mainCategoryTitle.textContent = menuType;
                         mainCategoryTitle.classList.add('menu-main-category');
-                        menuItemsWrapper.appendChild(mainCategoryTitle);
-                
+                        menuHeaderWrapper.appendChild(mainCategoryTitle);
+
                         // Find the menu description by scanning all rows of the current menu type
                         const menuDescription = rows
                             .filter(row => row.Menu === menuType)
                             .find(row => row['Menu Description']?.trim() !== '')
                             ?.['Menu Description'];
-                
+
                         if (menuDescription) {
                             const descriptionElem = document.createElement('p');
                             descriptionElem.textContent = menuDescription;
                             descriptionElem.classList.add('menu-description');
-                            menuItemsWrapper.appendChild(descriptionElem);
+                            menuHeaderWrapper.appendChild(descriptionElem);
                         }
-                
+
+                        // Add the wrapper to the menu items wrapper
+                        menuItemsWrapper.appendChild(menuHeaderWrapper);
+
                         const menuGroups = groupBySubCategory(rows.filter(row => row.Menu === menuType));
-                
+
                         for (const [subCategory, items] of Object.entries(menuGroups)) {
                             const subCategoryContainer = document.createElement('div');
                             subCategoryContainer.classList.add('menu-items--subcategory');
-                
+
                             if (subCategory !== 'Other') {
                                 const subCategoryElem = document.createElement('h3');
                                 subCategoryElem.textContent = subCategory;
                                 subCategoryContainer.appendChild(subCategoryElem);
                             }
-                
+
                             items.forEach((row) => {
                                 const { Title, Price, Description, Mods, Notes } = row;
-                
+
                                 if (Title) {
                                     const menuItem = document.createElement('div');
                                     menuItem.classList.add('menu-item');
