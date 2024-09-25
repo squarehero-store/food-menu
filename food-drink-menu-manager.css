@@ -63,7 +63,7 @@
 [data-squarehero="restaurant-menu"].layout--simple .menu-item--description {
   text-align: center;
 }
-[data-squarehero="restaurant-menu"].layout--simple .menu-item--price-description {
+[data-squarehero="restaurant-menu"].layout--simple .menu-item--mods {
   text-align: center;
 }
 [data-squarehero="restaurant-menu"].layout--simple .menu-item--title {
@@ -142,7 +142,7 @@
   font-size: 1rem;
   padding-left: 5px;
 }
-[data-squarehero="restaurant-menu"] .menu-items--wrapper .menu-item .menu-item--price-description {
+[data-squarehero="restaurant-menu"] .menu-items--wrapper .menu-item .menu-item--mods {
   font-size: 1.2rem;
   font-weight: 500;
   margin-top: 5px;
