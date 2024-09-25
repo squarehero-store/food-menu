@@ -13,13 +13,10 @@ window.onload = function () {
         foodMenuContainer.setAttribute('data-squarehero', 'section-name');
         foodMenuContainer.setAttribute('sh-section', 'sh-menu');
 
-        // Get the style from the meta tag, default to 'Modern' if not specified or invalid
+        // Get the style from the meta tag, default to 'Modern' if not specified
         let style = 'Modern'; // Default to Modern
-        if (foodMenuMeta) {
-            const metaStyle = foodMenuMeta.getAttribute('style');
-            if (metaStyle && ['Modern', 'Simple'].includes(metaStyle)) {
-                style = metaStyle;
-            }
+        if (foodMenuMeta && foodMenuMeta.hasAttribute('style')) {
+            style = foodMenuMeta.getAttribute('style');
         }
 
         // Log the style for debugging
