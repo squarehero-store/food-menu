@@ -73,6 +73,9 @@
   content: '/';
   padding: 0 10px;
 }
+[data-squarehero="restaurant-menu"].layout--simple .menu-item--title.no-price h4:after {
+  display: none!important;
+}
 [data-squarehero="restaurant-menu"] .menu-items--wrapper {
   display: grid;
   grid-template-columns: 1fr;
