@@ -75,6 +75,15 @@ window.onload = function () {
                         mainCategoryTitle.classList.add('menu-main-category');
                         menuItemsWrapper.appendChild(mainCategoryTitle);
 
+                        // Add Menu Description
+                        const menuDescription = rows.find(row => row.Menu === menuType)['Menu Description'];
+                        if (menuDescription) {
+                            const descriptionElem = document.createElement('p');
+                            descriptionElem.textContent = menuDescription;
+                            descriptionElem.classList.add('menu-description');
+                            menuItemsWrapper.appendChild(descriptionElem);
+                        }
+
                         const menuGroups = groupBySubCategory(rows.filter(row => row.Menu === menuType));
 
                         for (const [subCategory, items] of Object.entries(menuGroups)) {
