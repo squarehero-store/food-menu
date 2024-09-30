@@ -38,6 +38,10 @@
   max-width: 1000px;
   margin: auto;
 }
+[data-squarehero="restaurant-menu"].layout--simple .menu-items--wrapper .menu-description {
+  text-align: center;
+  margin-bottom: 50px;
+}
 [data-squarehero="restaurant-menu"].layout--simple .menu-items--wrapper .menu-items--subcategory {
   display: grid;
   grid-template-columns: 1fr;
