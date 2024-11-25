@@ -30,9 +30,13 @@
 }
 [data-squarehero="restaurant-menu"].layout--modern .price {
   padding-left: 30px;
+  margin-top: 5px;
 }
 [data-squarehero="restaurant-menu"].layout--modern .menu-item--title {
   justify-content: space-between;
+}
+[data-squarehero="restaurant-menu"].layout--modern .menu-description {
+  text-align: center;
 }
 [data-squarehero="restaurant-menu"].layout--simple .menu-items--wrapper {
   max-width: 1000px;
@@ -244,4 +248,23 @@
 .menu-item {
   opacity: 0;
   animation: fadeIn 1s forwards;
+}
+/* Pill */
+body.primary-button-shape-pill .sh-button {
+  border-radius: 300px;
+}
+/* Petal */
+body.primary-button-shape-petal .sh-button {
+  border-top-left-radius: 16px;
+  border-top-right-radius: 0px;
+  border-bottom-right-radius: 16px;
+  border-bottom-left-radius: 0px;
+}
+/* Rounded rectangle */
+body.primary-button-shape-rounded .sh-button {
+  border-radius: 7px;
+}
+/* Oval */
+body.primary-button-shape-oval .sh-button {
+  border-radius: 100%;
 }
