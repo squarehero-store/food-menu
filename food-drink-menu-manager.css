@@ -48,17 +48,16 @@
 }
 [data-squarehero="restaurant-menu"].layout--simple .menu-items--wrapper .menu-items--subcategory {
   display: grid;
-  grid-template-columns: 1fr;
+  grid-template-columns: 1fr !important;
   gap: 50px;
 }
 @media only screen and (max-width: 750px) {
   [data-squarehero="restaurant-menu"].layout--simple .menu-items--wrapper .menu-items--subcategory {
-    grid-template-columns: 1fr;
     gap: 20px;
   }
 }
 [data-squarehero="restaurant-menu"].layout--simple .menu-items--wrapper .menu-items--subcategory h3 {
-  grid-column: span 3;
+  grid-column: span 1;
   font-size: 1.75rem;
   text-align: center;
   margin-bottom: 0;
@@ -82,7 +81,7 @@
   padding: 0 10px;
 }
 [data-squarehero="restaurant-menu"].layout--simple .menu-item--title.no-price h4:after {
-  display: none!important;
+  display: none !important;
 }
 [data-squarehero="restaurant-menu"] .menu-items--wrapper {
   display: grid;
@@ -107,7 +106,7 @@
 }
 @media only screen and (max-width: 750px) {
   [data-squarehero="restaurant-menu"] .menu-items--wrapper .menu-item {
-    grid-column: span 3;
+    grid-column: span 1;
   }
 }
 [data-squarehero="restaurant-menu"] .menu-items--wrapper .menu-item .menu-item--title {
