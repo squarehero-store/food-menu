@@ -13,7 +13,6 @@
 }
 @media only screen and (max-width: 750px) {
   [data-squarehero="restaurant-menu"].layout--modern .menu-items--wrapper .menu-items--subcategory {
-    grid-template-columns: 1fr;
     gap: 20px;
   }
 }
@@ -107,7 +106,7 @@
 }
 @media only screen and (max-width: 750px) {
   [data-squarehero="restaurant-menu"] .menu-items--wrapper .menu-item {
-    grid-column: span 1;
+    grid-column: span 3;
   }
 }
 [data-squarehero="restaurant-menu"] .menu-items--wrapper .menu-item .menu-item--title {
