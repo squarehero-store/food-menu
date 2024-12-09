@@ -24,6 +24,9 @@ window.onload = function () {
 
         foodMenuContainer.innerHTML = `
             <div data-squarehero="restaurant-menu" class="layout--${style.toLowerCase()}">
+                <div class="sh-loading-spinner">
+                    <div class="spinner"></div>
+                </div>
                 <div class="swipe-instruction-container" style="display: none;">
                     <p class="swipe-instruction">Swipe for more categories</p>
                     <svg class="swipe-arrow" xmlns="http://www.w3.org/2000/svg" width="16" height="10" fill="none" viewBox="0 0 16 10">
@@ -38,14 +41,15 @@ window.onload = function () {
         const sheetUrl = foodMenuMeta ? foodMenuMeta.getAttribute('sheet-url') : null;
 
         if (sheetUrl) {
+            const loadingSpinner = document.querySelector('.sh-loading-spinner');
+            const menuItemsWrapper = document.getElementById('menuItemsWrapper');
+            const menuTabs = document.getElementById('menuTabs');
+
             Papa.parse(sheetUrl, {
                 download: true,
                 header: true,
                 complete: function (results) {
                     const rows = results.data;
-
-                    const menuTabs = document.getElementById('menuTabs');
-                    const menuItemsWrapper = document.getElementById('menuItemsWrapper');
 
                     const uniqueMenus = [...new Set(rows.map(row => row.Menu).filter(menu => menu.trim() !== ''))];
 
@@ -54,9 +58,13 @@ window.onload = function () {
                         tabButton.textContent = menuType;
                         tabButton.classList.add('sh-button');
                         tabButton.onclick = function () {
-                            displayMenu(menuType);
-                            setActiveTab(tabButton);
-                            scrollToTab(tabButton);
+                            menuItemsWrapper.style.opacity = '0';
+                            setTimeout(() => {
+                                displayMenu(menuType);
+                                setActiveTab(tabButton);
+                                scrollToTab(tabButton);
+                                menuItemsWrapper.style.opacity = '1';
+                            }, 300);
                         };
                         menuTabs.appendChild(tabButton);
 
@@ -79,7 +87,7 @@ window.onload = function () {
                         mainCategoryTitle.classList.add('menu-main-category');
                         menuHeaderWrapper.appendChild(mainCategoryTitle);
 
-                        // Find the menu description by scanning all rows of the current menu type
+                        // Find the menu description
                         const menuDescription = rows
                             .filter(row => row.Menu === menuType)
                             .find(row => row['Menu Description']?.trim() !== '')
@@ -92,7 +100,6 @@ window.onload = function () {
                             menuHeaderWrapper.appendChild(descriptionElem);
                         }
 
-                        // Add the wrapper to the menu items wrapper
                         menuItemsWrapper.appendChild(menuHeaderWrapper);
 
                         const menuGroups = groupBySubCategory(rows.filter(row => row.Menu === menuType));
@@ -229,10 +236,26 @@ window.onload = function () {
                             scrollToTab(tabs[i]);
                         }
                     }
+
+                    // Initial menu display
                     displayMenu(menuToDisplay);
+                    
+                    // Hide loading spinner and show content with proper timing
+                    setTimeout(() => {
+                        loadingSpinner.style.opacity = '0';
+                        setTimeout(() => {
+                            loadingSpinner.style.display = 'none';
+                            menuItemsWrapper.style.opacity = '1';
+                        }, 300);
+                    }, 500);
                 },
                 error: function (error, file) {
                     console.error('Error parsing CSV:', error, file);
+                    loadingSpinner.innerHTML = `
+                        <div class="loading-error">
+                            <p>Error loading menu data. Please try again later.</p>
+                        </div>
+                    `;
                 }
             });
         } else {
