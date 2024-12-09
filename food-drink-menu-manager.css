@@ -112,6 +112,7 @@
 [data-squarehero="restaurant-menu"] .menu-items--wrapper .menu-item .menu-item--title {
   width: 100%;
   display: flex;
+  align-items: center;
 }
 [data-squarehero="restaurant-menu"] .menu-items--wrapper .menu-item .menu-item--title h4 {
   margin-bottom: 0px;
