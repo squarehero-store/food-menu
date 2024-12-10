@@ -121,23 +121,24 @@
 [data-squarehero="restaurant-menu"].layout--simple .menu-item--title.no-price h4:after {
   display: none !important;
 }
-[data-squarehero="restaurant-menu"] .menu-items--wrapper {
+[data-squarehero="restaurant-menu"] .menu-items--wrapper .menu-items--wrapper {
   display: grid;
   grid-template-columns: 1fr;
   gap: 50px;
   opacity: 0;
-  transition: opacity 0.3s ease-in;
+  transition: opacity 0.5s ease-in;
+  will-change: opacity;
 }
 @media only screen and (max-width: 750px) {
-  [data-squarehero="restaurant-menu"] .menu-items--wrapper {
+  [data-squarehero="restaurant-menu"] .menu-items--wrapper .menu-items--wrapper {
     padding: 0 6vw;
   }
 }
-[data-squarehero="restaurant-menu"] .menu-items--wrapper.loaded {
-  opacity: 1;
+[data-squarehero="restaurant-menu"] .menu-items--wrapper .menu-items--wrapper.visible {
+  opacity: 1 !important;
 }
 @media only screen and (max-width: 750px) {
-  [data-squarehero="restaurant-menu"] .menu-items--wrapper {
+  [data-squarehero="restaurant-menu"] .menu-items--wrapper .menu-items--wrapper {
     gap: 20px;
   }
 }
@@ -188,7 +189,6 @@
     margin-top: 0;
     font-size: 1rem;
     line-height: 140%;
-    padding-right: 12vw;
   }
 }
 [data-squarehero="restaurant-menu"] .menu-items--wrapper .menu-item .notes {
