@@ -95,7 +95,7 @@
   }
 }
 [data-squarehero="restaurant-menu"].layout--simple .menu-items--wrapper .menu-items--subcategory h3 {
-  grid-column: span 1;
+  grid-column: span 3;
   font-size: 1.75rem;
   text-align: center;
   margin-bottom: 0;
