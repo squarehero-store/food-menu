@@ -265,13 +265,24 @@
                 function addStructuredData(rows, uniqueMenus) {
                     // Create menu items for JSON-LD
                     const menuItems = rows.filter(row => row.Title).map(item => {
+                        // Format the price properly for structured data
+                        let formattedPrice = item.Price ? item.Price.trim() : "";
+                        
+                        // For prices with slashes or multiple options, use the first price
+                        if (formattedPrice.includes('/')) {
+                            formattedPrice = formattedPrice.split('/')[0].trim();
+                        }
+                        
+                        // Now extract only numbers and decimal points for the structured data
+                        const numericPrice = formattedPrice.replace(/[^0-9.]/g, '');
+                        
                         return {
                             "@type": "MenuItem",
                             "name": item.Title,
                             "description": item.Description || "",
                             "offers": {
                                 "@type": "Offer",
-                                "price": item.Price ? item.Price.replace(/[^0-9.]/g, '') : "",
+                                "price": numericPrice,
                                 "priceCurrency": "USD" // Change this to your currency
                             }
                         };
