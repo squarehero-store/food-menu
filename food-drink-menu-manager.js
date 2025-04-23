@@ -1,4 +1,4 @@
-window.onload = function () {
+document.addEventListener('DOMContentLoaded', function () {
     console.info('🚀 SquareHero.store Food & Drink Menu Manager plugin loaded');
 
     document.body.classList.add('menu-page');
@@ -225,17 +225,61 @@ window.onload = function () {
 
                     window.addEventListener('resize', toggleSwipeInstruction);
 
-                    const defaultMenu = uniqueMenus[0];
-                    const requestedMenu = getQueryParam('menu');
-                    const menuToDisplay = uniqueMenus.find(menu => menu.toLowerCase() === (requestedMenu ? requestedMenu.toLowerCase() : '').toLowerCase()) || defaultMenu;
+                    function addStructuredData(rows, uniqueMenus) {
+                        // Create menu items for JSON-LD
+                        const menuItems = rows.filter(row => row.Title).map(item => {
+                            return {
+                                "@type": "MenuItem",
+                                "name": item.Title,
+                                "description": item.Description || "",
+                                "offers": {
+                                    "@type": "Offer",
+                                    "price": item.Price ? item.Price.replace(/[^0-9.]/g, '') : "",
+                                    "priceCurrency": "USD" // Change this to your currency
+                                }
+                            };
+                        });
+                        
+                        const structuredData = {
+                            "@context": "https://schema.org",
+                            "@type": "Restaurant",
+                            "menu": {
+                                "@type": "Menu",
+                                "hasMenuSection": uniqueMenus.map(menuType => {
+                                    return {
+                                        "@type": "MenuSection",
+                                        "name": menuType,
+                                        "hasMenuItem": menuItems.filter(item => 
+                                            rows.find(row => 
+                                                row.Title === item.name && row.Menu === menuType
+                                            )
+                                        )
+                                    };
+                                })
+                            }
+                        };
+                        
+                        const script = document.createElement('script');
+                        script.type = 'application/ld+json';
+                        script.text = JSON.stringify(structuredData);
+                        document.head.appendChild(script);
+                    }
 
-                    const tabs = menuTabs.getElementsByTagName('button');
-                    for (let i = 0; i < tabs.length; i++) {
-                        if (tabs[i].textContent.toLowerCase() === menuToDisplay.toLowerCase()) {
-                            setActiveTab(tabs[i]);
-                            scrollToTab(tabs[i]);
+                    function addSEOMetaTags(rows, uniqueMenus) {
+                        const menuDescription = uniqueMenus.join(', ');
+                        
+                        // Create meta description if it doesn't exist
+                        if (!document.querySelector('meta[name="description"]')) {
+                            const metaDescription = document.createElement('meta');
+                            metaDescription.name = 'description';
+                            metaDescription.content = `Our menu features: ${menuDescription}. Browse our full selection of dishes and drinks.`;
+                            document.head.appendChild(metaDescription);
                         }
                     }
+
+                    // Add structured data and SEO meta tags
+                    addStructuredData(rows, uniqueMenus);
+                    addSEOMetaTags(rows, uniqueMenus);
 
                     // Initial menu display
                     displayMenu(menuToDisplay);
@@ -262,4 +306,4 @@ window.onload = function () {
             console.error('No sheet URL provided in the meta tag.');
         }
     }
-};
+});
