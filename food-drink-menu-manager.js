@@ -528,7 +528,13 @@
             // Initial menu display
             displayMenu(menuToDisplay);
             
-            // Hide fallback content and loading spinner immediately, show content
+            // Hide static content and loading spinner when CSV data loads
+            const staticContent = document.querySelector('.static-menu-content');
+            if (staticContent) {
+                staticContent.style.display = 'none';
+                staticContent.classList.add('hidden');
+            }
+            
             if (fallbackContent) {
                 fallbackContent.style.display = 'none';
             }

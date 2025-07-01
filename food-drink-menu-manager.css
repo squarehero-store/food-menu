@@ -16,7 +16,7 @@
   height: 50px;
   border: 3px solid #fafafa;
   border-radius: 50%;
-  border-top-color: hsla(var(--darkAccent-hsl), 1);
+  border-top-color: #616E30;
   animation: spin 1s ease-in-out infinite;
 }
 .sh-loading-spinner .loading-error {
@@ -32,6 +32,37 @@
 }
 [data-squarehero="restaurant-menu"] {
   position: relative;
+}
+[data-squarehero="restaurant-menu"] .static-menu-content {
+  opacity: 1;
+  transition: opacity 0.3s ease-out;
+}
+[data-squarehero="restaurant-menu"] .static-menu-content[style*="display: none"],
+[data-squarehero="restaurant-menu"] .static-menu-content.hidden {
+  opacity: 0;
+  pointer-events: none;
+  display: none !important;
+}
+[data-squarehero="restaurant-menu"] .static-menu-content h1,
+[data-squarehero="restaurant-menu"] .static-menu-content h2,
+[data-squarehero="restaurant-menu"] .static-menu-content h3 {
+  font-family: var(--heading-font-font-family);
+  margin-bottom: 10px;
+}
+[data-squarehero="restaurant-menu"] .static-menu-content p {
+  font-family: var(--body-font-font-family);
+  color: #3f3f3f;
+  line-height: 1.6;
+}
+[data-squarehero="restaurant-menu"] .static-menu-content .menu-section {
+  margin-bottom: 20px;
+}
+[data-squarehero="restaurant-menu"] .static-menu-content .noscript-menu {
+  padding: 20px;
+  background: #fafafa;
+  border-radius: 5px;
+  text-align: center;
+  margin-top: 20px;
 }
 [data-squarehero="restaurant-menu"] .menu-content {
   transition: opacity 0.3s ease-in-out;
@@ -149,7 +180,7 @@
 }
 [data-squarehero="restaurant-menu"] .menu-items--wrapper .menu-main-category {
   text-align: center;
-  color: hsla(var(--darkAccent-hsl), 1);
+  color: #616E30;
   font-size: 2.85rem;
   margin: 0;
 }
@@ -167,7 +198,7 @@
   margin-bottom: 0px;
   margin-top: 0;
   font-size: 1.3rem;
-  color: hsla(var(--black-hsl), 1);
+  color: #353C2E;
   font-style: normal;
   font-weight: 700;
   line-height: 130%;
@@ -204,7 +235,7 @@
   font-size: 1.2rem;
   font-weight: 500;
   margin-top: 5px;
-  color: hsla(var(--darkAccent-hsl), 1);
+  color: #616E30;
 }
 #menuTabs {
   box-sizing: border-box;
@@ -239,8 +270,8 @@
   font-size: 1.25rem;
   font-weight: 500;
   line-height: normal;
-  border: solid 2px hsla(var(--darkAccent-hsl), 1);
-  color: hsla(var(--darkAccent-hsl), 1);
+  border: solid 2px #616E30;
+  color: #616E30;
   text-decoration: none;
   background: none;
   margin-right: 10px;
@@ -254,7 +285,7 @@
 }
 .menu-tabs button.active {
   color: white;
-  background: hsla(var(--darkAccent-hsl), 1);
+  background: #616E30;
   font-weight: 500;
 }
 .swipe-instruction-container {
