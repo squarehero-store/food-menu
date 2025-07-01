@@ -16,7 +16,7 @@
   height: 50px;
   border: 3px solid #fafafa;
   border-radius: 50%;
-  border-top-color: #616E30;
+  border-top-color: hsla(var(--darkAccent-hsl), 1);
   animation: spin 1s ease-in-out infinite;
 }
 .sh-loading-spinner .loading-error {
@@ -180,7 +180,7 @@
 }
 [data-squarehero="restaurant-menu"] .menu-items--wrapper .menu-main-category {
   text-align: center;
-  color: #616E30;
+  color: hsla(var(--darkAccent-hsl), 1);
   font-size: 2.85rem;
   margin: 0;
 }
@@ -198,7 +198,7 @@
   margin-bottom: 0px;
   margin-top: 0;
   font-size: 1.3rem;
-  color: #353C2E;
+  color: hsla(var(--black-hsl), 1);
   font-style: normal;
   font-weight: 700;
   line-height: 130%;
@@ -235,7 +235,7 @@
   font-size: 1.2rem;
   font-weight: 500;
   margin-top: 5px;
-  color: #616E30;
+  color: hsla(var(--darkAccent-hsl), 1);
 }
 #menuTabs {
   box-sizing: border-box;
@@ -270,8 +270,8 @@
   font-size: 1.25rem;
   font-weight: 500;
   line-height: normal;
-  border: solid 2px #616E30;
-  color: #616E30;
+  border: solid 2px hsla(var(--darkAccent-hsl), 1);
+  color: hsla(var(--darkAccent-hsl), 1);
   text-decoration: none;
   background: none;
   margin-right: 10px;
@@ -285,7 +285,7 @@
 }
 .menu-tabs button.active {
   color: white;
-  background: #616E30;
+  background: hsla(var(--darkAccent-hsl), 1);
   font-weight: 500;
 }
 .swipe-instruction-container {
