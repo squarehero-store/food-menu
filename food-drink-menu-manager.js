@@ -174,6 +174,24 @@
         // Add immediate meta tags for better SEO while loading
         addBasicSEOMetaTags();
 
+        function addBasicSEOMetaTags() {
+            // Add basic meta tags immediately for better SEO
+            if (!document.querySelector('meta[name="description"]')) {
+                const metaDescription = document.createElement('meta');
+                metaDescription.name = 'description';
+                metaDescription.content = 'Browse our menu featuring quality food and beverage options.';
+                document.head.appendChild(metaDescription);
+            }
+            
+            // Add Open Graph tags for social sharing
+            if (!document.querySelector('meta[property="og:type"]')) {
+                const ogType = document.createElement('meta');
+                ogType.setAttribute('property', 'og:type');
+                ogType.content = 'restaurant.menu';
+                document.head.appendChild(ogType);
+            }
+        }
+
         Papa.parse(sheetUrl, {
             download: true,
             header: true,
@@ -412,26 +430,8 @@
                     if (!document.querySelector('meta[name="description"]')) {
                         const metaDescription = document.createElement('meta');
                         metaDescription.name = 'description';
-                        metaDescription.content = `Our menu features: ${menuDescription}. Browse our full selection of dishes and drinks.`;
+                        metaDescription.content = `Our menu features: ${menuDescription}. Browse our full selection of items.`;
                         document.head.appendChild(metaDescription);
-                    }
-                }
-
-                function addBasicSEOMetaTags() {
-                    // Add basic meta tags immediately for better SEO
-                    if (!document.querySelector('meta[name="description"]')) {
-                        const metaDescription = document.createElement('meta');
-                        metaDescription.name = 'description';
-                        metaDescription.content = 'Browse our menu featuring quality food and beverage options.';
-                        document.head.appendChild(metaDescription);
-                    }
-                    
-                    // Add Open Graph tags for social sharing
-                    if (!document.querySelector('meta[property="og:type"]')) {
-                        const ogType = document.createElement('meta');
-                        ogType.setAttribute('property', 'og:type');
-                        ogType.content = 'restaurant.menu';
-                        document.head.appendChild(ogType);
                     }
                 }
 
