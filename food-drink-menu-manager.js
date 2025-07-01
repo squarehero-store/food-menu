@@ -1,4 +1,47 @@
 (function() {
+    // Check if this is a crawler or bot
+    function isCrawler() {
+        const userAgent = navigator.userAgent.toLowerCase();
+        const crawlers = [
+            'googlebot', 'bingbot', 'slurp', 'duckduckbot', 'baiduspider',
+            'yandexbot', 'facebookexternalhit', 'twitterbot', 'rogerbot',
+            'linkedinbot', 'embedly', 'quora link preview', 'showyoubot',
+            'outbrain', 'pinterest', 'developers.google.com/+/web/snippet'
+        ];
+        return crawlers.some(crawler => userAgent.includes(crawler));
+    }
+
+    // Add static content for crawlers
+    function addStaticMenuContent(container) {
+        const staticContent = `
+            <div class="static-menu-content">
+                <h1>Menu</h1>
+                <p>Explore our selection of food and beverages.</p>
+                
+                <div class="menu-section">
+                    <h2>Menu Categories</h2>
+                    <p>Our menu features various categories of items to choose from.</p>
+                </div>
+                
+                <div class="menu-section">
+                    <h3>Quality Food & Beverages</h3>
+                    <p>Browse our complete menu selection featuring various food and drink options.</p>
+                </div>
+                
+                <noscript>
+                    <div class="noscript-menu">
+                        <h3>Enable JavaScript for Full Menu</h3>
+                        <p>Please enable JavaScript in your browser to view our complete interactive menu with prices and detailed descriptions.</p>
+                    </div>
+                </noscript>
+            </div>
+        `;
+        
+        if (container) {
+            container.insertAdjacentHTML('afterbegin', staticContent);
+        }
+    }
+
     function initializeMenu() {
         console.info('🚀 SquareHero.store Food & Drink Menu Manager plugin loaded');
 
@@ -17,6 +60,9 @@
 
         if (isEnabled && foodMenuContainer) {
             initMenu(foodMenuContainer);
+        } else if (foodMenuContainer) {
+            // If menu is not enabled, add static content for crawlers
+            addStaticMenuContent(foodMenuContainer);
         }
     }
 
@@ -37,21 +83,58 @@
         // Log the style for debugging
         console.log('Menu style:', style);
 
-        foodMenuContainer.innerHTML = `
-            <div data-squarehero="restaurant-menu" class="layout--${style.toLowerCase()}">
-                <div class="sh-loading-spinner">
-                    <div class="spinner"></div>
+        // Check if this is a crawler and add static content first
+        if (isCrawler()) {
+            addStaticMenuContent(foodMenuContainer);
+        }
+
+        // Check if container already has fallback content (for SEO)
+        const hasExistingContent = foodMenuContainer.innerHTML.trim() !== '';
+        
+        if (!hasExistingContent) {
+            // Add immediate fallback content for crawlers
+            foodMenuContainer.innerHTML = `
+                <div data-squarehero="restaurant-menu" class="layout--${style.toLowerCase()}">
+                    <div class="menu-fallback-content">
+                        <h2>Menu</h2>
+                        <p>Loading menu options...</p>
+                        <noscript>
+                            <p>Please enable JavaScript to view our interactive menu, or contact us to learn about our current offerings.</p>
+                        </noscript>
+                    </div>
+                    <div class="sh-loading-spinner">
+                        <div class="spinner"></div>
+                    </div>
+                    <div class="swipe-instruction-container" style="display: none;">
+                        <p class="swipe-instruction">Swipe for more categories</p>
+                        <svg class="swipe-arrow" xmlns="http://www.w3.org/2000/svg" width="16" height="10" fill="none" viewBox="0 0 16 10">
+                            <path stroke="#000" stroke-width="2" d="m1 1 7 7 7-7"/>
+                        </svg>
+                    </div>
+                    <div class="menu-tabs" id="menuTabs"></div>
+                    <div class="menu-items--wrapper" id="menuItemsWrapper"></div>
                 </div>
-                <div class="swipe-instruction-container" style="display: none;">
-                    <p class="swipe-instruction">Swipe for more categories</p>
-                    <svg class="swipe-arrow" xmlns="http://www.w3.org/2000/svg" width="16" height="10" fill="none" viewBox="0 0 16 10">
-                        <path stroke="#000" stroke-width="2" d="m1 1 7 7 7-7"/>
-                    </svg>
+            `;
+        } else {
+            // Content exists, just add our dynamic elements
+            const existingContent = foodMenuContainer.innerHTML;
+            foodMenuContainer.innerHTML = `
+                <div data-squarehero="restaurant-menu" class="layout--${style.toLowerCase()}">
+                    ${existingContent}
+                    <div class="sh-loading-spinner" style="display: none;">
+                        <div class="spinner"></div>
+                    </div>
+                    <div class="swipe-instruction-container" style="display: none;">
+                        <p class="swipe-instruction">Swipe for more categories</p>
+                        <svg class="swipe-arrow" xmlns="http://www.w3.org/2000/svg" width="16" height="10" fill="none" viewBox="0 0 16 10">
+                            <path stroke="#000" stroke-width="2" d="m1 1 7 7 7-7"/>
+                        </svg>
+                    </div>
+                    <div class="menu-tabs" id="menuTabs"></div>
+                    <div class="menu-items--wrapper" id="menuItemsWrapper"></div>
                 </div>
-                <div class="menu-tabs" id="menuTabs"></div>
-                <div class="menu-items--wrapper" id="menuItemsWrapper"></div>
-            </div>
-        `;
+            `;
+        }
 
         const sheetUrl = foodMenuMeta ? foodMenuMeta.getAttribute('sheet-url') : null;
 
@@ -78,9 +161,18 @@
         const loadingSpinner = document.querySelector('.sh-loading-spinner');
         const menuItemsWrapper = document.getElementById('menuItemsWrapper');
         const menuTabs = document.getElementById('menuTabs');
+        const fallbackContent = document.querySelector('.menu-fallback-content');
+
+        // Show loading spinner if no existing content
+        if (loadingSpinner && !fallbackContent) {
+            loadingSpinner.style.display = 'block';
+        }
 
         // Define a default menu to display if URL param is provided
         let menuToDisplay = getQueryParam('menu') || null;
+
+        // Add immediate meta tags for better SEO while loading
+        addBasicSEOMetaTags();
 
         Papa.parse(sheetUrl, {
             download: true,
@@ -325,6 +417,24 @@
                     }
                 }
 
+                function addBasicSEOMetaTags() {
+                    // Add basic meta tags immediately for better SEO
+                    if (!document.querySelector('meta[name="description"]')) {
+                        const metaDescription = document.createElement('meta');
+                        metaDescription.name = 'description';
+                        metaDescription.content = 'Browse our menu featuring quality food and beverage options.';
+                        document.head.appendChild(metaDescription);
+                    }
+                    
+                    // Add Open Graph tags for social sharing
+                    if (!document.querySelector('meta[property="og:type"]')) {
+                        const ogType = document.createElement('meta');
+                        ogType.setAttribute('property', 'og:type');
+                        ogType.content = 'restaurant.menu';
+                        document.head.appendChild(ogType);
+                    }
+                }
+
                 // Add structured data and SEO meta tags
                 addStructuredData(rows, uniqueMenus);
                 addSEOMetaTags(rows, uniqueMenus);
@@ -332,22 +442,47 @@
                 // Initial menu display
                 displayMenu(menuToDisplay);
                 
-                // Hide loading spinner and show content with proper timing
-                setTimeout(() => {
+                // Hide fallback content and loading spinner immediately, show content
+                if (fallbackContent) {
+                    fallbackContent.style.display = 'none';
+                }
+                
+                if (loadingSpinner) {
                     loadingSpinner.style.opacity = '0';
                     setTimeout(() => {
                         loadingSpinner.style.display = 'none';
-                        menuItemsWrapper.style.opacity = '1';
-                    }, 300);
-                }, 500);
+                    }, 200);
+                }
+                
+                // Show menu content immediately
+                if (menuItemsWrapper) {
+                    menuItemsWrapper.style.opacity = '1';
+                    menuItemsWrapper.style.display = 'block';
+                }
             },
             error: function (error, file) {
                 console.error('Error parsing CSV:', error, file);
-                loadingSpinner.innerHTML = `
-                    <div class="loading-error">
-                        <p>Error loading menu data. Please try again later.</p>
-                    </div>
-                `;
+                
+                // Hide loading spinner
+                if (loadingSpinner) {
+                    loadingSpinner.style.display = 'none';
+                }
+                
+                // Show meaningful error content for crawlers
+                if (menuItemsWrapper) {
+                    menuItemsWrapper.innerHTML = `
+                        <div class="loading-error">
+                            <h2>Menu Currently Unavailable</h2>
+                            <p>We're sorry, but our menu is temporarily unavailable. Please contact us to learn about our current offerings.</p>
+                            <p>We feature fresh, quality dishes and a selection of beverages.</p>
+                        </div>
+                    `;
+                    menuItemsWrapper.style.opacity = '1';
+                    menuItemsWrapper.style.display = 'block';
+                }
+                
+                // Still add basic meta tags even on error
+                addBasicSEOMetaTags();
             }
         });
     }
