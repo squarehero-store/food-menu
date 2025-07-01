@@ -16,4 +16,7 @@ node_modules/
 # Ignore the replace-vars.js script
 replace-variables.js
 
+cloudflare-worker.js
+google-apps-script.js
+
 # Ignore other files or directories as needed

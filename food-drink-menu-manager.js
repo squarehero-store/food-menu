@@ -82,11 +82,13 @@
         // Define a default menu to display if URL param is provided
         let menuToDisplay = getQueryParam('menu') || null;
 
-        // Detect if this is a Google Apps Script URL or CSV URL
-        const isAppsScript = sheetUrl.includes('script.google.com') || sheetUrl.includes('script.googleusercontent.com');
+        // Detect if this is a JSON endpoint (Google Apps Script or Cloudflare Worker) or CSV URL
+        const isJsonEndpoint = sheetUrl.includes('script.google.com') || 
+                              sheetUrl.includes('script.googleusercontent.com') ||
+                              sheetUrl.includes('workers.dev');
         
-        if (isAppsScript) {
-            // Handle Google Apps Script JSON response
+        if (isJsonEndpoint) {
+            // Handle JSON response from Google Apps Script or Cloudflare Worker
             fetch(sheetUrl)
                 .then(response => {
                     if (!response.ok) {
@@ -96,14 +98,14 @@
                 })
                 .then(result => {
                     if (result.success && result.data) {
-                        console.info('✅ Menu data loaded via Google Apps Script');
+                        console.info('✅ Menu data loaded via JSON endpoint (Apps Script/Cloudflare Worker)');
                         processMenuData(result.data);
                     } else {
                         throw new Error(result.error || 'Invalid data format from Apps Script');
                     }
                 })
                 .catch(error => {
-                    console.error('Error fetching from Apps Script:', error);
+                    console.error('Error fetching from JSON endpoint:', error);
                     handleDataError(error.message);
                 });
         } else {
